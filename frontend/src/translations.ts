@@ -16,7 +16,7 @@ export function toLocalizedDigits(input: string | number, lang: Language): strin
 export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   kn: {
     // Header & Global
-    appTitle: "ಅಗ್ರೋಶೀಲ್ಡ್ AI",
+    appTitle: "Croply (ಕ್ರಾಪ್ಲಿ)",
     tagline: "ಮುನ್ಸೂಚನೆ • ನಿಖರ ರಕ್ಷಣೆ • ಅಧಿಕ ಇಳುವರಿ",
     verifiedStandard: "ICAR-IIHR ಮಾನ್ಯತೆ ಪಡೆದ ಮಾನದಂಡ",
     farmerGreeting: "ರಮೇಶ್ ಕುಮಾರ್",
@@ -239,7 +239,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
 
   mr: {
     // Header & Global
-    appTitle: "ॲग्रोशील्ड AI",
+    appTitle: "Croply (क्रॉपली)",
     tagline: "अगोदर ओळख • अचूक संरक्षण • भरघोस पीक",
     verifiedStandard: "ICAR-IIHR प्रमाणित शेती मानक",
     farmerGreeting: "रमेश कुमार",
@@ -462,7 +462,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
 
   hi: {
     // Header & Global
-    appTitle: "एग्रोशील्ड AI",
+    appTitle: "Croply (क्रॉपली)",
     tagline: "पहले पहचानें • सटीक सुरक्षा • अधिक पैदावार",
     verifiedStandard: "ICAR-IIHR प्रमाणित कृषि मानक",
     farmerGreeting: "रमेश कुमार",
@@ -685,7 +685,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
 
   en: {
     // Header & Global
-    appTitle: "AGROSHIELD AI",
+    appTitle: "Croply",
     tagline: "Detect Early • Predict Smarter • Protect Every Crop",
     verifiedStandard: "ICAR-IIHR Verified Agricultural Standard",
     farmerGreeting: "Ramesh Kumar",
