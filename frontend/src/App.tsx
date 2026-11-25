@@ -55,6 +55,21 @@ export default function App() {
   // 2. Active Tab State
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
 
+  // Dark / Light Mode State
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    return localStorage.getItem('croply_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('croply_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('croply_theme', 'light');
+    }
+  }, [isDarkMode]);
+
   // 3. User & Multi-Farm State
   const [user, setUser] = useState<any>(() => {
     const saved = localStorage.getItem('agroshield_user');
@@ -340,6 +355,15 @@ export default function App() {
                 </button>
               ))}
             </div>
+
+            {/* Dark / Light Mode Switcher */}
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition border border-slate-200 cursor-pointer flex items-center justify-center"
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              <span>{isDarkMode ? '☀️' : '🌙'}</span>
+            </button>
 
             {/* Profile / Account Dashboard Button */}
             <button
@@ -1261,6 +1285,60 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* MOBILE FIRST APP BOTTOM NAVIGATION BAR (PLANTIX NATIVE STYLE) */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 py-1.5 px-3 z-40 shadow-lg flex items-center justify-around">
+        <button
+          onClick={() => setActiveTab('dashboard')}
+          className={`flex flex-col items-center justify-center p-1 rounded-xl transition cursor-pointer ${
+            activeTab === 'dashboard' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 dark:text-slate-500 font-medium'
+          }`}
+        >
+          <span className="text-xl">🏠</span>
+          <span className="text-[10px] mt-0.5">Home</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('graphs')}
+          className={`flex flex-col items-center justify-center p-1 rounded-xl transition cursor-pointer ${
+            activeTab === 'graphs' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 dark:text-slate-500 font-medium'
+          }`}
+        >
+          <span className="text-xl">📈</span>
+          <span className="text-[10px] mt-0.5">Trends</span>
+        </button>
+
+        {/* Central Floating Camera Action Pill */}
+        <button
+          onClick={() => setActiveTab('doctor')}
+          className="flex flex-col items-center justify-center -mt-5 cursor-pointer group"
+        >
+          <div className="w-13 h-13 rounded-full bg-gradient-to-tr from-[#0b66e4] to-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-500/35 border-4 border-white dark:border-slate-900 active:scale-90 transition">
+            <IconCamera className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-[10px] font-extrabold text-[#0b66e4] mt-0.5">Scan</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('farm')}
+          className={`flex flex-col items-center justify-center p-1 rounded-xl transition cursor-pointer ${
+            activeTab === 'farm' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 dark:text-slate-500 font-medium'
+          }`}
+        >
+          <span className="text-xl">🌱</span>
+          <span className="text-[10px] mt-0.5">Farm</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('profile')}
+          className={`flex flex-col items-center justify-center p-1 rounded-xl transition cursor-pointer ${
+            activeTab === 'profile' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 dark:text-slate-500 font-medium'
+          }`}
+        >
+          <span className="text-xl">👤</span>
+          <span className="text-[10px] mt-0.5">Profile</span>
+        </button>
+      </div>
     </div>
   );
 }
