@@ -5,7 +5,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://agroshield-ai-backend.onrender.com/api/$1"
+      "destination": "https://croply-backend-fyrf.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
