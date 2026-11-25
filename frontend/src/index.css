@@ -86,3 +86,27 @@
 .dark .shadow-xl {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
 }
+
+
+/* Professional Typography & Clean App Pattern */
+@layer base {
+  h1, h2, h3, h4 {
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Subtle Microdot Background Pattern for Professional Polish */
+body {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dark body {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Glassmorphism Accents */
+.glass-header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}

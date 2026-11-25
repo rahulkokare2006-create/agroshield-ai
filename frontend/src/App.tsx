@@ -55,6 +55,56 @@ export default function App() {
   // 2. Active Tab State
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
 
+  // PWA Install Prompt State
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isAppInstalled, setIsAppInstalled] = useState<boolean>(() => {
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      localStorage.getItem('croply_pwa_installed') === 'true'
+    );
+  });
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      if (!isAppInstalled) {
+        setShowInstallBanner(true);
+      }
+    };
+
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setShowInstallBanner(false);
+      localStorage.setItem('croply_pwa_installed', 'true');
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, [isAppInstalled]);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) {
+      alert('To install Croply: tap your browser menu (⋮ or Share) and select "Add to Home screen" / "Install App".');
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setIsAppInstalled(true);
+      setShowInstallBanner(false);
+      localStorage.setItem('croply_pwa_installed', 'true');
+    }
+    setDeferredPrompt(null);
+  };
+
   // Dark / Light Mode State
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     return localStorage.getItem('croply_theme') === 'dark';
@@ -356,6 +406,18 @@ export default function App() {
               ))}
             </div>
 
+            {/* Install PWA App Button (Hidden if already installed) */}
+            {!isAppInstalled && (
+              <button
+                onClick={handleInstallClick}
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-extrabold shadow-sm shadow-emerald-600/25 transition cursor-pointer animate-pulse"
+                title="Install Croply on phone/PC"
+              >
+                <span>📲</span>
+                <span className="hidden sm:inline">Install App</span>
+              </button>
+            )}
+
             {/* Dark / Light Mode Switcher */}
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
@@ -383,6 +445,34 @@ export default function App() {
 
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-5">
+        {/* Mobile Smart PWA Install Callout Banner (Disappears after install) */}
+        {!isAppInstalled && showInstallBanner && (
+          <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800 rounded-2xl p-3.5 mb-5 text-white flex items-center justify-between shadow-md">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-xl">
+                📲
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-extrabold leading-tight">Install Croply App</h4>
+                <p className="text-[11px] text-emerald-100 mt-0.5">Instant 1-tap crop scanning, offline support & full-screen view</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handleInstallClick}
+                className="px-3.5 py-1.5 bg-white text-emerald-900 rounded-xl text-xs font-black shadow-xs hover:bg-emerald-50 transition cursor-pointer"
+              >
+                Install
+              </button>
+              <button
+                onClick={() => setShowInstallBanner(false)}
+                className="w-7 h-7 rounded-lg text-emerald-200 hover:text-white flex items-center justify-center text-sm"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
         {/* Farmer Profile & Greeting Banner */}
         <div className="bg-white rounded-3xl p-5 md:p-6 border border-slate-200/80 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-4">
           <div
