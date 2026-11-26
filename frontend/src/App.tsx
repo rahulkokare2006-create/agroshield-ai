@@ -849,18 +849,18 @@ export default function App() {
             </div>
 
             {/* Farm Profile & Real Interactive Satellite Map */}
-            <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200/80 shadow-sm">
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
+            <div className="bg-white rounded-3xl p-4 sm:p-6 md:p-8 border border-slate-200/80 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                 <div>
                   <h3 className="text-base md:text-lg font-bold text-slate-900">
-                    {activeFarm?.field_name || t.farmProfileTitle}
+                    {activeFarm?.field_name ? activeFarm.field_name.split('(')[0].trim() : t.farmProfileTitle}
                   </h3>
                   <p className="text-xs text-slate-500">
                     {t.farmProfileSubtitle}
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-2 text-xs">
+                <div className="flex flex-wrap items-center gap-2 text-xs">
                   <button
                     onClick={() => setIsAddFarmModalOpen(true)}
                     className="px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-xl border border-emerald-200 cursor-pointer transition whitespace-nowrap"
