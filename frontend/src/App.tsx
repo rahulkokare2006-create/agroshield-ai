@@ -346,9 +346,7 @@ export default function App() {
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 md:px-8 py-3 shadow-xs">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white text-xl shadow-md shadow-emerald-600/30 font-bold">
-              🛡️
-            </div>
+            <img src="/icon-192.png" alt="Croply" className="w-10 h-10 rounded-2xl object-cover shadow-sm border border-emerald-500/30 flex-shrink-0" />
             <div>
               <div className="flex items-center space-x-2">
                 <span className="font-extrabold text-lg md:text-xl tracking-tight text-slate-900">
@@ -449,9 +447,7 @@ export default function App() {
         {!isAppInstalled && showInstallBanner && (
           <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800 rounded-2xl p-3.5 mb-5 text-white flex items-center justify-between shadow-md">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-xl">
-                📲
-              </div>
+              <img src="/icon-192.png" alt="Croply" className="w-10 h-10 rounded-xl object-cover shadow-sm border border-emerald-400/40 flex-shrink-0" />
               <div>
                 <h4 className="text-xs sm:text-sm font-extrabold leading-tight">Install Croply App</h4>
                 <p className="text-[11px] text-emerald-100 mt-0.5">Instant 1-tap crop scanning, offline support & full-screen view</p>
