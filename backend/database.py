@@ -172,6 +172,11 @@ def init_db():
     """)
 
     # Run safe column additions for backward-compatibility
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN state_district TEXT DEFAULT 'Kolar, Karnataka';")
+    except sqlite3.OperationalError:
+        pass
+
     for col, col_type in [
         ("state_district", "TEXT DEFAULT 'Kolar, Karnataka'"),
         ("irrigation_type", "TEXT DEFAULT 'Drip Lateral System'"),
