@@ -369,24 +369,26 @@ export const FieldMap: React.FC<FieldMapProps> = ({
       <div ref={mapContainerRef} className="w-full h-full bg-slate-900 z-0" />
 
       {/* Floating Status / Action Pill */}
-      <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10 pointer-events-none">
-        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 text-white text-xs flex items-center space-x-2 shadow-lg">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          <span className="font-bold">🛰️ Esri High-Res Satellite View</span>
-          <span className="text-[10px] text-emerald-300 font-medium">({fieldName})</span>
+      <div className="absolute top-3 left-3 right-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 z-10 pointer-events-none">
+        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 text-white text-xs flex items-center space-x-2 shadow-lg self-start max-w-full">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
+          <span className="font-bold whitespace-nowrap">🛰️ Satellite View</span>
+          <span className="text-[10px] text-emerald-300 font-medium truncate max-w-[140px] sm:max-w-[220px]">
+            {fieldName ? fieldName.split('(')[0].trim() : ''}
+          </span>
         </div>
 
-        <div className="flex items-center space-x-2 pointer-events-auto">
+        <div className="flex items-center space-x-1.5 pointer-events-auto self-end sm:self-auto">
           {saveSuccess && (
-            <span className="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-md animate-pulse">
-              ✅ Saved to Database!
+            <span className="bg-emerald-600 text-white font-bold text-xs px-2.5 py-1 rounded-xl shadow-md animate-pulse">
+              ✅ Saved!
             </span>
           )}
 
           <button
             type="button"
             onClick={handleRecenter}
-            className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/95 hover:bg-white text-slate-800 shadow-lg transition flex items-center space-x-1 cursor-pointer"
+            className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold bg-white/95 hover:bg-white text-slate-800 shadow-md transition flex items-center space-x-1 cursor-pointer"
             title="Re-center Satellite Map on this Farm"
           >
             <span>📍</span>
@@ -396,7 +398,7 @@ export const FieldMap: React.FC<FieldMapProps> = ({
           <button
             type="button"
             onClick={handleAdjustBoundary}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-lg transition flex items-center space-x-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold shadow-md transition flex items-center space-x-1.5 cursor-pointer ${
               isEditingBoundary
                 ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold'
                 : 'bg-white/95 hover:bg-white text-slate-800'

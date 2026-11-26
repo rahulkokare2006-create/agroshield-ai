@@ -105,20 +105,11 @@ export default function App() {
     setDeferredPrompt(null);
   };
 
-  // Dark / Light Mode State
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    return localStorage.getItem('croply_theme') === 'dark';
-  });
-
+  // Light Mode Enforced Permanently (Dark mode disabled per user preference)
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('croply_theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('croply_theme', 'light');
-    }
-  }, [isDarkMode]);
+    document.documentElement.classList.remove('dark');
+    localStorage.removeItem('croply_theme');
+  }, []);
 
   // 3. User & Multi-Farm State
   const [user, setUser] = useState<any>(() => {
@@ -343,100 +334,121 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-100/70 text-slate-900 pb-28 relative">
       {/* Top Header */}
-      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 md:px-8 py-3 shadow-xs">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <img src="/icon-192.png" alt="Croply" className="w-10 h-10 rounded-2xl object-cover shadow-sm border border-emerald-500/30 flex-shrink-0" />
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-extrabold text-lg md:text-xl tracking-tight text-slate-900">
-                  {t.appTitle}
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 hidden sm:inline">
-                  {t.verifiedStandard}
-                </span>
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-3 sm:px-6 py-2.5 shadow-xs">
+        <div className="max-w-7xl mx-auto">
+          {/* Main Header Row */}
+          <div className="flex items-center justify-between gap-2">
+            {/* Left: Brand Logo & Title */}
+            <div className="flex items-center space-x-2.5 min-w-0">
+              <img src="/icon-192.png" alt="Croply" className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl object-cover shadow-xs border border-emerald-500/30 flex-shrink-0" />
+              <div className="min-w-0">
+                <div className="flex items-center space-x-1.5">
+                  <span className="font-extrabold text-base sm:text-lg md:text-xl tracking-tight text-slate-900 truncate">
+                    Croply
+                  </span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 hidden md:inline">
+                    {t.verifiedStandard}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 font-medium hidden md:block truncate">
+                  {t.tagline}
+                </p>
               </div>
-              <p className="text-xs text-slate-500 font-medium hidden md:block">
-                {t.tagline}
-              </p>
+            </div>
+
+            {/* Right Controls: Farm Switcher (Desktop), Audio, Language, Profile */}
+            <div className="flex items-center space-x-1.5 sm:space-x-2 flex-shrink-0">
+              {/* Multi-Farm Dropdown Selector on Tablet & Desktop */}
+              {farms.length > 0 && (
+                <div className="hidden sm:block">
+                  <FarmSwitcher
+                    farms={farms}
+                    activeFarm={activeFarm}
+                    onSelectFarm={(farm) => setActiveFarm(farm)}
+                    onAddNewFarm={() => setIsAddFarmModalOpen(true)}
+                    t={t}
+                    lang={lang}
+                  />
+                </div>
+              )}
+
+              {/* Read-Aloud Voice Button */}
+              <button
+                onClick={() => speakText(`${t.appTitle}. ${user?.name || t.farmerGreeting}. ${activeFarm?.field_name || ''}. ${weatherData?.biological_explanation || ''}`)}
+                className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 text-xs font-bold transition border border-slate-200 cursor-pointer flex items-center space-x-1"
+                title={t.readAloud}
+              >
+                <IconVolume2 className="w-4 h-4 text-emerald-600" />
+                <span className="hidden lg:inline">{t.readAloud}</span>
+              </button>
+
+              {/* 4-Language Pill Switcher */}
+              <div className="flex items-center bg-slate-100 p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border border-slate-200">
+                {(['kn', 'mr', 'hi', 'en'] as Language[]).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => handleLangChange(l)}
+                    className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 text-[11px] sm:text-xs font-bold rounded-lg sm:rounded-xl transition cursor-pointer ${
+                      lang === l
+                        ? 'bg-emerald-600 text-white shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {l === 'kn' ? 'ಕ' : l === 'mr' ? 'मर' : l === 'hi' ? 'हि' : 'EN'}
+                  </button>
+                ))}
+              </div>
+
+              {/* Install PWA App Button (Desktop) */}
+              {!isAppInstalled && (
+                <button
+                  onClick={handleInstallClick}
+                  className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-extrabold shadow-xs transition cursor-pointer"
+                  title="Install Croply App"
+                >
+                  <span>📲</span>
+                  <span>Install</span>
+                </button>
+              )}
+
+              {/* Profile / Account Dashboard Button */}
+              <button
+                onClick={() => setActiveTab('profile')}
+                className={`px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-bold transition cursor-pointer flex items-center space-x-1 ${
+                  activeTab === 'profile'
+                    ? 'bg-emerald-600 text-white border-emerald-700'
+                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-200'
+                }`}
+              >
+                <span>👤</span>
+                <span className="hidden sm:inline">{user ? user.name.split(' ')[0] : t.loginBtn}</span>
+              </button>
             </div>
           </div>
 
-          {/* Right Controls: Farm Switcher, Audio, Language, Profile Button */}
-          <div className="flex items-center space-x-2 sm:space-x-2.5">
-            {/* Multi-Farm Dropdown Selector */}
+          {/* Dedicated Clean Sub-Row on Mobile for Farm Switcher & Install */}
+          <div className="sm:hidden mt-2 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
             {farms.length > 0 && (
-              <FarmSwitcher
-                farms={farms}
-                activeFarm={activeFarm}
-                onSelectFarm={(farm) => setActiveFarm(farm)}
-                onAddNewFarm={() => setIsAddFarmModalOpen(true)}
-                t={t}
-                lang={lang}
-              />
+              <div className="flex-1 min-w-0">
+                <FarmSwitcher
+                  farms={farms}
+                  activeFarm={activeFarm}
+                  onSelectFarm={(farm) => setActiveFarm(farm)}
+                  onAddNewFarm={() => setIsAddFarmModalOpen(true)}
+                  t={t}
+                  lang={lang}
+                />
+              </div>
             )}
-
-            {/* Read-Aloud Voice Button */}
-            <button
-              onClick={() => speakText(`${t.appTitle}. ${user?.name || t.farmerGreeting}. ${activeFarm?.field_name || ''}. ${weatherData?.biological_explanation || ''}`)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 text-xs font-bold transition border border-slate-200 cursor-pointer"
-              title={t.readAloud}
-            >
-              <IconVolume2 className="w-4 h-4 text-emerald-600" />
-              <span className="hidden lg:inline">{t.readAloud}</span>
-            </button>
-
-            {/* 4-Language Pill Switcher */}
-            <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200">
-              <IconGlobe className="w-4 h-4 text-slate-500 ml-1 mr-1 hidden sm:block" />
-              {(['kn', 'mr', 'hi', 'en'] as Language[]).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => handleLangChange(l)}
-                  className={`px-2 sm:px-2.5 py-1 text-xs font-bold rounded-xl transition cursor-pointer ${
-                    lang === l
-                      ? 'bg-emerald-600 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {l === 'kn' ? 'ಕನ್ನಡ' : l === 'mr' ? 'मराठी' : l === 'hi' ? 'हिंदी' : 'EN'}
-                </button>
-              ))}
-            </div>
-
-            {/* Install PWA App Button (Hidden if already installed) */}
             {!isAppInstalled && (
               <button
                 onClick={handleInstallClick}
-                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-extrabold shadow-sm shadow-emerald-600/25 transition cursor-pointer animate-pulse"
-                title="Install Croply on phone/PC"
+                className="px-2.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-xs flex items-center space-x-1 flex-shrink-0 cursor-pointer"
               >
                 <span>📲</span>
-                <span className="hidden sm:inline">Install App</span>
+                <span>Install</span>
               </button>
             )}
-
-            {/* Dark / Light Mode Switcher */}
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition border border-slate-200 cursor-pointer flex items-center justify-center"
-              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              <span>{isDarkMode ? '☀️' : '🌙'}</span>
-            </button>
-
-            {/* Profile / Account Dashboard Button */}
-            <button
-              onClick={() => setActiveTab('profile')}
-              className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition cursor-pointer flex items-center space-x-1 ${
-                activeTab === 'profile'
-                  ? 'bg-emerald-600 text-white border-emerald-700'
-                  : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-200'
-              }`}
-            >
-              <span>👤</span>
-              <span className="hidden sm:inline">{user ? user.name.split(' ')[0] : t.loginBtn}</span>
-            </button>
           </div>
         </div>
       </header>
@@ -470,50 +482,50 @@ export default function App() {
           </div>
         )}
         {/* Farmer Profile & Greeting Banner */}
-        <div className="bg-white rounded-3xl p-5 md:p-6 border border-slate-200/80 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-xs mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div
             onClick={() => setActiveTab('profile')}
-            className="flex items-center space-x-3.5 cursor-pointer group"
+            className="flex items-start sm:items-center space-x-3 cursor-pointer group"
           >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xl shadow-sm group-hover:scale-105 transition">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xl shadow-xs group-hover:scale-105 transition flex-shrink-0">
               👨‍🌾
             </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <h1 className="text-base md:text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition">
+            <div className="min-w-0">
+              <div className="flex items-center flex-wrap gap-1.5">
+                <h1 className="text-base md:text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition truncate">
                   {user?.name || t.farmerGreeting}
                 </h1>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium whitespace-nowrap">
                   📍 {activeFarm?.field_name ? activeFarm.field_name.split('(')[0].trim() : (user?.state_district || t.farmerLocation)}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                <strong>{activeFarm?.field_name || t.farmNameLabel}</strong> • {t.varietyLabel}: {activeFarm?.tomato_variety || 'Arka Rakshak'} • {t.areaLabel}: {toLocalizedDigits(activeFarm?.area_acres || 1.2, lang)} Acres
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                <strong>{activeFarm?.field_name ? activeFarm.field_name.split('(')[0].trim() : t.farmNameLabel}</strong> • {t.varietyLabel}: {activeFarm?.tomato_variety || 'Arka Rakshak'} • {t.areaLabel}: {toLocalizedDigits(activeFarm?.area_acres || 1.2, lang)} Acres
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex sm:items-center sm:space-x-2 pt-1 sm:pt-0 border-t sm:border-t-0 border-slate-100">
             <button
               onClick={() => setIsAddFarmModalOpen(true)}
-              className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/20 transition cursor-pointer"
+              className="flex items-center justify-center space-x-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition cursor-pointer"
             >
               <span>🌱</span>
-              <span>{t.addNewFarmBtn}</span>
+              <span className="truncate">{t.addNewFarmBtn}</span>
             </button>
 
             <button
               onClick={() => setActiveTab('farm')}
-              className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 transition cursor-pointer"
+              className="flex items-center justify-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 transition cursor-pointer"
             >
-              <IconSprout className="w-4 h-4 text-emerald-600" />
-              <span>{t.editBoundaryBtn}</span>
+              <IconSprout className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span className="truncate">{t.editBoundaryBtn}</span>
             </button>
           </div>
         </div>
 
-        {/* Clean Farmer Navigation Menu Bar */}
-        <nav className="bg-white rounded-2xl p-1.5 border border-slate-200 shadow-sm mb-6 flex items-center overflow-x-auto space-x-1 scrollbar-none">
+        {/* Clean Farmer Navigation Menu Bar with edge-to-edge scroll */}
+        <nav className="bg-white rounded-2xl p-1.5 border border-slate-200 shadow-xs mb-6 flex items-center overflow-x-auto space-x-1 scrollbar-none">
           <button
             onClick={() => setActiveTab('dashboard')}
             className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold whitespace-nowrap transition cursor-pointer ${

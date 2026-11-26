@@ -27,11 +27,11 @@ export const FarmSwitcher: React.FC<FarmSwitcherProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 px-3.5 py-1.5 rounded-2xl bg-white border border-slate-200 text-slate-800 text-xs font-bold hover:bg-slate-50 transition shadow-xs cursor-pointer"
       >
-        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-        <span className="max-w-[140px] md:max-w-[200px] truncate">
-          {activeFarm?.field_name || t.currentActiveFarm}
+        <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
+        <span className="max-w-[150px] sm:max-w-[220px] truncate">
+          {activeFarm?.field_name ? activeFarm.field_name.split('(')[0].trim() : t.currentActiveFarm}
         </span>
-        <span className="text-[10px] text-slate-400">▼</span>
+        <span className="text-[10px] text-slate-400 flex-shrink-0">▼</span>
       </button>
 
       {isOpen && (

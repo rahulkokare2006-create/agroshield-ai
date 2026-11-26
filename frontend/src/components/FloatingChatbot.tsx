@@ -112,8 +112,8 @@ export const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ language, t, o
 
   return (
     <>
-      {/* Floating Chat Icon (Fixed at Bottom-Right of Website) */}
-      <div className="fixed bottom-6 right-6 z-40 flex items-center space-x-2">
+      {/* Floating Chat Icon (Positioned above mobile bottom bar) */}
+      <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center space-x-2">
         {!isOpen && (
           <span className="hidden md:inline-block px-3 py-1.5 rounded-full bg-slate-900/90 text-white text-xs font-bold shadow-lg backdrop-blur-md border border-white/20 animate-pulse">
             💬 {t.floatingChatHint || 'Kisan AI'}
@@ -121,7 +121,7 @@ export const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ language, t, o
         )}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center text-2xl shadow-2xl border-2 border-white transition-all transform hover:scale-105 active:scale-95 cursor-pointer relative"
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center text-xl sm:text-2xl shadow-xl border-2 border-white transition-all transform hover:scale-105 active:scale-95 cursor-pointer relative"
           title={t.chatbotTitle}
         >
           {isOpen ? '✕' : '💬'}
@@ -135,7 +135,7 @@ export const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ language, t, o
 
       {/* Floating Chat Drawer Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 md:right-6 z-50 w-[94vw] md:w-[420px] h-[520px] bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-fadeIn">
+        <div className="fixed bottom-24 right-3 sm:right-6 z-50 w-[94vw] sm:w-[400px] h-[70vh] max-h-[520px] bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-fadeIn">
           {/* Header */}
           <div className="bg-emerald-600 text-white p-4 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center space-x-2.5">
