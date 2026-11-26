@@ -81,7 +81,24 @@ body {
 
 /* Light Mode Only Theme (Dark mode disabled per user preference) */
 :root {
-  color-scheme: light;
+  color-scheme: light !important;
+}
+
+html, body {
+  background-color: #f4f6f8 !important;
+  color: #0f172a !important;
+}
+
+html.dark, body.dark {
+  background-color: #f4f6f8 !important;
+  color: #0f172a !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background-color: #f4f6f8 !important;
+    color: #0f172a !important;
+  }
 }
 
 /* Professional Typography & Clean App Pattern */

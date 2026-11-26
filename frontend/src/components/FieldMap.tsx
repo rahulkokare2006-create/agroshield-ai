@@ -91,9 +91,10 @@ export const FieldMap: React.FC<FieldMapProps> = ({
       const map = L.map(mapContainerRef.current, {
         center: [centerLat, centerLng],
         zoom: 17,
-        zoomControl: true,
+        zoomControl: false,
         attributionControl: false,
       });
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
 
       // REAL HIGH-RES SATELLITE: Esri World Imagery
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -369,42 +370,45 @@ export const FieldMap: React.FC<FieldMapProps> = ({
       <div ref={mapContainerRef} className="w-full h-full bg-slate-900 z-0" />
 
       {/* Floating Status / Action Pill */}
-      <div className="absolute top-3 left-3 right-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 z-10 pointer-events-none">
-        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 text-white text-xs flex items-center space-x-2 shadow-lg self-start max-w-full">
+      <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between gap-1.5 z-10 pointer-events-none">
+        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl border border-white/20 text-white text-xs flex items-center space-x-1.5 shadow-lg max-w-[55%] sm:max-w-none">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
-          <span className="font-bold whitespace-nowrap">🛰️ Satellite View</span>
-          <span className="text-[10px] text-emerald-300 font-medium truncate max-w-[140px] sm:max-w-[220px]">
+          <span className="font-bold whitespace-nowrap text-[11px] sm:text-xs">🛰️ Satellite</span>
+          <span className="text-[10px] text-emerald-300 font-medium truncate">
             {fieldName ? fieldName.split('(')[0].trim() : ''}
           </span>
         </div>
 
-        <div className="flex items-center space-x-1.5 pointer-events-auto self-end sm:self-auto">
+        <div className="flex items-center space-x-1 sm:space-x-1.5 pointer-events-auto flex-shrink-0">
           {saveSuccess && (
-            <span className="bg-emerald-600 text-white font-bold text-xs px-2.5 py-1 rounded-xl shadow-md animate-pulse">
-              ✅ Saved!
+            <span className="bg-emerald-600 text-white font-bold text-[10px] sm:text-xs px-2 py-0.5 sm:py-1 rounded-xl shadow-md animate-pulse">
+              ✅ Saved
             </span>
           )}
 
           <button
             type="button"
             onClick={handleRecenter}
-            className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold bg-white/95 hover:bg-white text-slate-800 shadow-md transition flex items-center space-x-1 cursor-pointer"
+            className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-white/95 hover:bg-white text-slate-800 shadow-md transition flex items-center space-x-1 cursor-pointer"
             title="Re-center Satellite Map on this Farm"
           >
             <span>📍</span>
-            <span>{t.centerLocationBtn || 'Re-Center'}</span>
+            <span className="hidden xs:inline">{t.centerLocationBtn || 'Re-Center'}</span>
           </button>
 
           <button
             type="button"
             onClick={handleAdjustBoundary}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold shadow-md transition flex items-center space-x-1.5 cursor-pointer ${
+            className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold shadow-md transition flex items-center space-x-1 cursor-pointer ${
               isEditingBoundary
                 ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold'
                 : 'bg-white/95 hover:bg-white text-slate-800'
             }`}
           >
-            <span>{isEditingBoundary ? '💾 ' + t.saveBoundaryBtn : '✏️ ' + t.editBoundaryBtn}</span>
+            <span>{isEditingBoundary ? '💾' : '✏️'}</span>
+            <span className="truncate max-w-[80px] sm:max-w-none">
+              {isEditingBoundary ? (t.saveBoundaryBtn || 'Save') : (t.editBoundaryBtn || 'Boundary')}
+            </span>
           </button>
         </div>
       </div>

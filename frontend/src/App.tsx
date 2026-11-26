@@ -108,7 +108,10 @@ export default function App() {
   // Light Mode Enforced Permanently (Dark mode disabled per user preference)
   useEffect(() => {
     document.documentElement.classList.remove('dark');
+    if (document.body) document.body.classList.remove('dark');
     localStorage.removeItem('croply_theme');
+    localStorage.removeItem('agroshield_theme');
+    localStorage.removeItem('theme');
   }, []);
 
   // 3. User & Multi-Farm State
@@ -860,11 +863,11 @@ export default function App() {
                 <div className="flex items-center space-x-2 text-xs">
                   <button
                     onClick={() => setIsAddFarmModalOpen(true)}
-                    className="px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-xl border border-emerald-200 cursor-pointer transition"
+                    className="px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-xl border border-emerald-200 cursor-pointer transition whitespace-nowrap"
                   >
-                    + {t.addNewFarmBtn}
+                    {t.addNewFarmBtn?.startsWith('+') ? t.addNewFarmBtn : `+ ${t.addNewFarmBtn}`}
                   </button>
-                  <span className="px-3 py-1 bg-slate-100 text-slate-700 font-bold rounded-xl border border-slate-200">
+                  <span className="px-3 py-1 bg-slate-100 text-slate-700 font-bold rounded-xl border border-slate-200 whitespace-nowrap">
                     {toLocalizedDigits(activeFarm?.area_acres || 1.2, lang)} Acres • {activeFarm?.tomato_variety || 'Arka Rakshak'}
                   </span>
                 </div>
@@ -1044,11 +1047,11 @@ export default function App() {
                 <div className="flex items-center space-x-3 text-xs">
                   <button
                     onClick={() => setIsAddFarmModalOpen(true)}
-                    className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs transition cursor-pointer"
+                    className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs transition cursor-pointer whitespace-nowrap"
                   >
-                    + {t.addNewFarmBtn}
+                    {t.addNewFarmBtn?.startsWith('+') ? t.addNewFarmBtn : `+ ${t.addNewFarmBtn}`}
                   </button>
-                  <span className="px-3 py-1.5 bg-emerald-50 text-emerald-800 font-bold rounded-xl border border-emerald-200">
+                  <span className="px-3 py-1.5 bg-emerald-50 text-emerald-800 font-bold rounded-xl border border-emerald-200 whitespace-nowrap">
                     {t.areaLabel}: {toLocalizedDigits(activeFarm?.area_acres || 1.2, lang)} Acres
                   </span>
                 </div>
@@ -1385,11 +1388,11 @@ export default function App() {
       )}
 
       {/* MOBILE FIRST APP BOTTOM NAVIGATION BAR (PLANTIX NATIVE STYLE) */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 py-1.5 px-3 z-40 shadow-lg flex items-center justify-around">
+      <div className="md:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 py-1.5 px-3 z-40 shadow-lg flex items-center justify-around">
         <button
           onClick={() => setActiveTab('dashboard')}
           className={`flex flex-col items-center justify-center p-1 rounded-xl transition cursor-pointer ${
-            activeTab === 'dashboard' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 dark:text-slate-500 font-medium'
+            activeTab === 'dashboard' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 font-medium'
           }`}
         >
           <span className="text-xl">🏠</span>
@@ -1399,7 +1402,7 @@ export default function App() {
         <button
           onClick={() => setActiveTab('graphs')}
           className={`flex flex-col items-center justify-center p-1 rounded-xl transition cursor-pointer ${
-            activeTab === 'graphs' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 dark:text-slate-500 font-medium'
+            activeTab === 'graphs' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 font-medium'
           }`}
         >
           <span className="text-xl">📈</span>
@@ -1411,7 +1414,7 @@ export default function App() {
           onClick={() => setActiveTab('doctor')}
           className="flex flex-col items-center justify-center -mt-5 cursor-pointer group"
         >
-          <div className="w-13 h-13 rounded-full bg-gradient-to-tr from-[#0b66e4] to-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-500/35 border-4 border-white dark:border-slate-900 active:scale-90 transition">
+          <div className="w-13 h-13 rounded-full bg-gradient-to-tr from-[#0b66e4] to-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-500/35 border-4 border-white active:scale-90 transition">
             <IconCamera className="w-6 h-6 text-white" />
           </div>
           <span className="text-[10px] font-extrabold text-[#0b66e4] mt-0.5">Scan</span>
@@ -1420,7 +1423,7 @@ export default function App() {
         <button
           onClick={() => setActiveTab('farm')}
           className={`flex flex-col items-center justify-center p-1 rounded-xl transition cursor-pointer ${
-            activeTab === 'farm' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 dark:text-slate-500 font-medium'
+            activeTab === 'farm' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 font-medium'
           }`}
         >
           <span className="text-xl">🌱</span>
@@ -1430,7 +1433,7 @@ export default function App() {
         <button
           onClick={() => setActiveTab('profile')}
           className={`flex flex-col items-center justify-center p-1 rounded-xl transition cursor-pointer ${
-            activeTab === 'profile' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 dark:text-slate-500 font-medium'
+            activeTab === 'profile' ? 'text-emerald-600 font-extrabold' : 'text-slate-400 font-medium'
           }`}
         >
           <span className="text-xl">👤</span>

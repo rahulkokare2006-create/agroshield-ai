@@ -1,4 +1,4 @@
-const CACHE_NAME = 'croply-cache-v2';
+const CACHE_NAME = 'croply-cache-v3';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
